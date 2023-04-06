@@ -1,0 +1,118 @@
+##引入mybatis支持
+$!mybatisSupport
+
+##设置保存名称与保存位置
+$!callback.setFileName($tool.append($!{tableInfo.name}, "Mapper.xml"))
+$!callback.setSavePath($tool.append($tableInfo.savePath, "/dao"))
+
+##拿到主键
+#if(!$tableInfo.pkColumn.isEmpty())
+    #set($pk = $tableInfo.pkColumn.get(0))
+#end
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="$!{tableInfo.savePackageName}.dao.$!{tableInfo.name}Mapper">
+
+    <sql id="cols">
+        #allSqlColumn()
+
+    </sql>
+
+    <sql id="tableName">
+		$!tableInfo.obj.name
+	</sql>
+
+    <sql id="setSql">
+        <set>
+#foreach($column in $tableInfo.otherColumn)
+#if(!$!column.name.equals("orgId"))
+            <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
+                $!column.obj.name = #{$!column.name},
+            </if>
+#end
+#end
+        </set>
+    </sql>
+
+    <sql id="whereSql">
+#foreach($column in $tableInfo.fullColumn)
+        <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
+            and t.$!column.obj.name = #{$!column.name}
+        </if>
+#end
+    </sql>
+
+    <resultMap id="BaseResultMap" type="$!{tableInfo.savePackageName}.bean.$!{tableInfo.name}">
+        <!--@Table $!{tableInfo.originTableName}-->
+#foreach($column in $tableInfo.fullColumn)
+#if($!pk.obj.name.equals($!column.obj.name))
+        <id property="$!column.name" column="$!column.obj.name"/>
+#end
+#if(!$!pk.obj.name.equals($!column.obj.name))
+        <result property="$!column.name" column="$!column.obj.name"/>
+#end
+#end
+    </resultMap>
+
+    <select id="find" resultMap="BaseResultMap">
+        select
+        <include refid="cols"/>
+        from <include refid="tableName"/> t
+    </select>
+
+    <!-- 列表查询-->
+    <select id="findByCondtion" resultMap="BaseResultMap">
+        select
+        <include refid="cols"/>
+        from <include refid="tableName"/> t
+        where 1=1
+        <include refid="whereSql"/>
+        <if test="orderKey != null and orderKey != ''">order by ${orderKey}</if>
+    </select>
+
+    <select id="getByCondtion" resultMap="BaseResultMap">
+        select
+        <include refid="cols"/>
+        from <include refid="tableName"/> t
+        where 1=1
+        <include refid="whereSql"/>
+    </select>
+
+    <!--查询单个-->
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="cols"/> t
+        from <include refid="tableName"/> t
+        where t.org_id = #{orgId}
+        and t.$!pk.obj.name = #{$!pk.name}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="$!pk.name" useGeneratedKeys="true">
+        insert into <include refid="tableName"/> (#foreach($column in $tableInfo.fullColumn)$!column.obj.name#if($velocityHasNext), #end#end)
+        values (#foreach($column in $tableInfo.fullColumn)#{$!{column.name}}#if($velocityHasNext), #end#end)
+    </insert>
+
+    <insert id="insertBatch" parameterType="ArrayList">
+        insert into <include refid="tableName"/> (#foreach($column in $tableInfo.fullColumn)$!column.obj.name#if($velocityHasNext), #end#end)
+        values
+        <foreach collection="list" item="bean" separator=",">
+            (#foreach($column in $tableInfo.fullColumn)#{bean.$!{column.name}}#if($velocityHasNext), #end#end)
+        </foreach>
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update <include refid="tableName"/>
+        <include refid="setSql"/>
+        where org_id = #{orgId}
+        and $!pk.obj.name = #{$!pk.name}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from <include refid="tableName"/> where org_id = #{orgId} and $!pk.obj.name = #{$!pk.name}
+    </delete>
+
+</mapper>

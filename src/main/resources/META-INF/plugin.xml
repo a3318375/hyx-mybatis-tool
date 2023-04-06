@@ -1,18 +1,35 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.a3318375.hyxmybatistool</id>
-    <name>hyx-mybatis-tool Template</name>
+    <name>hyx-mybatis-tool</name>
     <vendor>a3318375</vendor>
+    <depends>com.intellij.modules.lang</depends>
 
     <depends>com.intellij.modules.platform</depends>
+    <!--必须依赖Database Tool插件-->
+    <depends>com.intellij.database</depends>
+    <!--必须依赖Velocity插件-->
+    <depends>com.intellij.velocity</depends>
 
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="com.github.a3318375.hyxmybatistool.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+
+        <!-- Add your extensions here -->
+        <applicationService serviceImplementation="com.tsm.config.Settings"/>
+        <projectService serviceInterface="com.tsm.service.TableInfoService" serviceImplementation="com.tsm.service.impl.TableInfoServiceImpl"/>
+        <projectService serviceInterface="com.tsm.service.CodeGenerateService" serviceImplementation="com.tsm.service.impl.CodeGenerateServiceImpl"/>
+        <!--系统设置面板-->
+        <applicationConfigurable dynamic="true" instance="com.tsm.ui.MainSetting"/>
+
+        <velocity.globalVariableProvider implementation="com.tsm.provider.EasyCodeGlobalVariableProvider"/>
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.a3318375.hyxmybatistool.listeners.MyFrameStateListener" topic="com.intellij.ide.FrameStateListener"/>
-    </applicationListeners>
+    <actions>
+        <!-- Add your actions here -->
+        <action id="com.tsm.actions" class="com.tsm.actions.MainActionGroup" text="HyxMybatisHelper" popup="true">
+            <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>
+        </action>
+    </actions>
 </idea-plugin>

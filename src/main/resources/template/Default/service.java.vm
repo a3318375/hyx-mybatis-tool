@@ -1,0 +1,86 @@
+##定义初始变量
+#set($tableName = $tool.append($tableInfo.name, "Service"))
+#set($mapperName = $tool.append($!tool.firstLowerCase($!{tableInfo.name}), "Mapper"))
+#set($user = "user")
+#set($UUID = "SysBaseModelUtil.getUUID()")
+#set($date = "new Date()")
+
+##定义实体对象名
+#set($entityName = $!tool.firstLowerCase($!tableInfo.name))
+##设置回调
+$!callback.setFileName($tool.append($tableName, ".java"))
+$!callback.setSavePath($tool.append($tableInfo.savePath, "/service"))
+
+##拿到主键
+#if(!$tableInfo.pkColumn.isEmpty())
+    #set($pk = $tableInfo.pkColumn.get(0))
+#end
+
+#if($tableInfo.savePackageName)package $!{tableInfo.savePackageName}.#{end}service;
+
+import $!{tableInfo.savePackageName}.bean.$!{tableInfo.name};
+import $!{tableInfo.savePackageName}.dao.$!{tableInfo.name}Mapper;
+import com.github.pagehelper.PageHelper;
+import org.springframework.stereotype.Service;
+import com.github.pagehelper.PageInfo;
+import javax.annotation.Resource;
+import com.qftx.shiro.ShiroUser;
+import com.qftx.common.util.SysBaseModelUtil;
+import java.util.List;
+import java.util.Date;
+
+/**
+ * $!{tableInfo.comment}($!{tableInfo.name})表服务接口
+ *
+ * @author $!author
+ * @since $!time.currTime()
+ */
+@Service
+public class $!{tableName} {
+
+    @Resource
+    private $!{tableInfo.name}Mapper $!{mapperName};
+
+
+    public List<$!{tableInfo.name}> find(){
+        return $!{mapperName}.find();
+    }
+
+    public List<$!{tableInfo.name}> findByCondtion($!{tableInfo.name} $!{entityName}){
+        $!{entityName}.setIsDel(0);
+        return $!{mapperName}.findByCondtion($!{entityName});
+    }
+
+    public PageInfo<$!{tableInfo.name}> findListPage($!{tableInfo.name} $!{entityName}){
+        $!{entityName}.setIsDel(0);
+        PageHelper.startPage($!{entityName}.getPageNum(), $!{entityName}.getPageSize());
+        List<$!{tableInfo.name}> list = $!{mapperName}.findByCondtion($!{entityName});
+        return new PageInfo<>(list);
+    }
+
+    public $!{tableInfo.name} getByCondtion($!{tableInfo.name} $!{entityName}){
+        $!{entityName}.setIsDel(0);
+        return $!{mapperName}.getByCondtion($!{entityName});
+    }
+
+    public void insert($!{tableInfo.name} $!{entityName}, ShiroUser user){
+        $!{entityName}.setId($UUID);
+        $!{entityName}.setOrgId($!{user}.getOrgId());
+        $!{entityName}.setInputAcc($!{user}.getAccount());
+        $!{entityName}.setInputTime($date);
+        $!{entityName}.setIsDel(0);
+        $!{mapperName}.insert($!{entityName});
+    }
+    
+    public void insertBatch(List<$!{tableInfo.name}> $!{entityName}) {
+        $!{mapperName}.insertBatch($!{entityName});
+    }
+
+    public void update($!{tableInfo.name} $!{entityName}) {
+        $!{mapperName}.update($!{entityName});
+    }
+
+    public void del($!{tableInfo.name} entity) {
+        update(entity);
+    }
+}
