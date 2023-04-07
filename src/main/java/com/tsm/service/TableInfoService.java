@@ -25,6 +25,7 @@ import java.util.List;
 public interface TableInfoService {
     /**
      * 获取实例对象
+     *
      * @param project 项目对象
      * @return 实例对象
      */
@@ -46,14 +47,7 @@ public interface TableInfoService {
      * @param dbTables 原始表对象
      * @return 表信息对象
      */
-    default List<TableInfo> getTableInfoByDbTable(Collection<DbTable> dbTables) {
-        if (CollectionUtil.isEmpty(dbTables)) {
-            return Collections.EMPTY_LIST;
-        }
-        List<TableInfo> tableInfoList = new ArrayList<>(dbTables.size());
-        dbTables.forEach(dbTable -> tableInfoList.add(this.getTableInfoByDbTable(dbTable)));
-        return tableInfoList;
-    }
+    List<TableInfo> getTableInfoByDbTable(Collection<DbTable> dbTables);
 
     /**
      * 获取表信息并加载配置信息
@@ -69,14 +63,7 @@ public interface TableInfoService {
      * @param dbTables 原始表对象
      * @return 表信息对象
      */
-    default List<TableInfo> getTableInfoAndConfig(Collection<DbTable> dbTables) {
-        if (CollectionUtil.isEmpty(dbTables)) {
-            return Collections.EMPTY_LIST;
-        }
-        List<TableInfo> tableInfoList = new ArrayList<>(dbTables.size());
-        dbTables.forEach(dbTable -> tableInfoList.add(this.getTableInfoAndConfig(dbTable)));
-        return tableInfoList;
-    }
+    List<TableInfo> getTableInfoAndConfig(Collection<DbTable> dbTables);
 
     /**
      * 类型校验，如果存在未知类型则引导用于去条件类型

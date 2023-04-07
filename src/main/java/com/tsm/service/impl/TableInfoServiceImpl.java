@@ -1,7 +1,6 @@
 package com.tsm.service.impl;
 
 import com.github.a3318375.hyxmybatistool.MyBundle;
-import com.tsm.constants.MsgValue;
 import com.tsm.entity.ColumnInfo;
 import com.tsm.entity.TableInfo;
 import com.tsm.entity.TypeMapper;
@@ -93,6 +92,7 @@ public class TableInfoServiceImpl implements TableInfoService {
             // 原始列对象
             columnInfo.setObj(column);
             // 列类型
+
             columnInfo.setType(getColumnType(column.getDasType().toDataType().typeName));
             // 短类型
             columnInfo.setShortType(nameUtils.getClsNameByFullName(columnInfo.getType()));
@@ -116,6 +116,16 @@ public class TableInfoServiceImpl implements TableInfoService {
         return tableInfo;
     }
 
+    @Override
+    public List<TableInfo> getTableInfoByDbTable(Collection<DbTable> dbTables) {
+        if (CollectionUtil.isEmpty(dbTables)) {
+            return Collections.EMPTY_LIST;
+        }
+        List<TableInfo> tableInfoList = new ArrayList<>(dbTables.size());
+        dbTables.forEach(dbTable -> tableInfoList.add(this.getTableInfoByDbTable(dbTable)));
+        return tableInfoList;
+    }
+
     /**
      * 获取表信息并加载配置信息
      *
@@ -128,6 +138,16 @@ public class TableInfoServiceImpl implements TableInfoService {
         // 加载配置
         this.loadConfig(tableInfo);
         return tableInfo;
+    }
+
+    @Override
+    public List<TableInfo> getTableInfoAndConfig(Collection<DbTable> dbTables) {
+        if (CollectionUtil.isEmpty(dbTables)) {
+            return new ArrayList<>();
+        }
+        List<TableInfo> tableInfoList = new ArrayList<>(dbTables.size());
+        dbTables.forEach(dbTable -> tableInfoList.add(this.getTableInfoAndConfig(dbTable)));
+        return tableInfoList;
     }
 
     /**
