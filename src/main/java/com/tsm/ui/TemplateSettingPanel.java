@@ -291,7 +291,7 @@ public class TemplateSettingPanel implements Configurable {
         panel.add(comboBox);
 
         // 调试动作按钮
-        DefaultActionGroup actionGroup = new DefaultActionGroup(new AnAction(IconLoader.findIcon("/icondd/toolConsole.png")) {
+        DefaultActionGroup actionGroup = new DefaultActionGroup(new AnAction(IconLoader.getIcon("/icondd/toolConsole.png", MainSetting.class)) {
             @Override
             public void actionPerformed(AnActionEvent e) {
                 // 获取选中的表

@@ -93,7 +93,7 @@ public class TableInfoServiceImpl implements TableInfoService {
             // 原始列对象
             columnInfo.setObj(column);
             // 列类型
-            columnInfo.setType(getColumnType(column.getDasType().getSpecification()));
+            columnInfo.setType(getColumnType(column.getDasType().toDataType().typeName));
             // 短类型
             columnInfo.setShortType(nameUtils.getClsNameByFullName(columnInfo.getType()));
 
@@ -135,7 +135,7 @@ public class TableInfoServiceImpl implements TableInfoService {
      *
      * @param tableInfo 表信息对象
      */
-    private void loadConfig(TableInfo tableInfo) {
+    public void loadConfig(TableInfo tableInfo) {
         if (tableInfo == null) {
             return;
         }
@@ -248,7 +248,7 @@ public class TableInfoServiceImpl implements TableInfoService {
 
         FLAG:
         for (DasColumn column : columns) {
-            String typeName = column.getDasType().getSpecification();
+            String typeName = column.getDasType().toDataType().typeName;
             for (TypeMapper typeMapper : typeMapperList) {
                 // 不区分大小写查找类型
                 if (Pattern.compile(typeMapper.getColumnType(), Pattern.CASE_INSENSITIVE).matcher(typeName).matches()) {

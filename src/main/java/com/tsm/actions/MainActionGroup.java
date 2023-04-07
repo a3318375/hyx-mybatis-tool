@@ -24,21 +24,6 @@ public class MainActionGroup extends ActionGroup {
      */
     private CacheDataUtils cacheDataUtils = CacheDataUtils.getInstance();
 
-    /**
-     * 是否不存在子菜单
-     */
-    private boolean notExistsChildren;
-
-    /**
-     * 是否分组按钮
-     *
-     * @return 是否隐藏
-     */
-    @Override
-    public boolean hideIfNoVisibleChildren() {
-        return this.notExistsChildren;
-    }
-
 
     /**
      * 根据右键在不同的选项上展示不同的子菜单
@@ -71,10 +56,9 @@ public class MainActionGroup extends ActionGroup {
         }
         List<DbTable> dbTableList = new ArrayList<>();
         for (PsiElement element : psiElements) {
-            if (!(element instanceof DbTable)) {
+            if (!(element instanceof DbTable dbTable)) {
                 continue;
             }
-            DbTable dbTable = (DbTable) element;
             dbTableList.add(dbTable);
         }
         if (dbTableList.isEmpty()) {
@@ -84,7 +68,6 @@ public class MainActionGroup extends ActionGroup {
         //保存数据到缓存
         cacheDataUtils.setDbTableList(dbTableList);
         cacheDataUtils.setSelectDbTable(selectDbTable);
-        this.notExistsChildren = false;
         return getMenuList();
     }
 
@@ -120,7 +103,6 @@ public class MainActionGroup extends ActionGroup {
      * @return 空菜单组
      */
     private AnAction[] getEmptyAnAction() {
-        this.notExistsChildren = true;
         return AnAction.EMPTY_ARRAY;
     }
 }

@@ -125,7 +125,7 @@ public class MainSetting implements Configurable, Configurable.Composite {
 
         // 模板导入事件
         importBtn.addActionListener(e -> {
-            String token = Messages.showInputDialog("Token:", MyBundle.message("title"), IconLoader.findIcon("/icondd/passwordLock.png"), "", new InputValidator() {
+            String token = Messages.showInputDialog("Token:", MyBundle.message("title"), IconLoader.getIcon("/icondd/passwordLock.png", MainSetting.class), "", new InputValidator() {
                 @Override
                 public boolean checkInput(String inputString) {
                     return !StringUtils.isEmpty(inputString);
