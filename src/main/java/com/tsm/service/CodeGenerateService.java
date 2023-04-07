@@ -22,8 +22,8 @@ public interface CodeGenerateService {
      * @param project 项目对象
      * @return 实例对象
      */
-    static CodeGenerateService getInstance(@NotNull Project project) {
-        return ServiceManager.getService(project, CodeGenerateService.class);
+    static CodeGenerateService getInstance(@NotNull Project project) {;
+        return project.getService(CodeGenerateService.class);
     }
 
     /**

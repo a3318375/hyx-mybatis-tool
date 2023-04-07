@@ -164,7 +164,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
                 File dir = new File(path);
                 if (!dir.exists()) {
                     // 提示创建目录
-                    if (title && !MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("noFundDirError", dir.getAbsolutePath())).isYes()) {
+                    if (title && !MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("noFundDirError", dir.getAbsolutePath())).guessWindowAndAsk()) {
                         continue;
                     }
                     if (!dir.mkdirs()) {
@@ -175,7 +175,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
                 File file = new File(dir, callback.getFileName());
                 // 提示是否覆盖文件
                 if (title && file.exists()) {
-                    if (!MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("fileExists", file.getName())).isYes()) {
+                    if (!MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("fileExists", file.getName())).guessWindowAndAsk()) {
                         continue;
                     }
                 }

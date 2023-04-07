@@ -37,8 +37,6 @@ public class MainAction extends AnAction {
         if (project == null) {
             return;
         }
-        Object obj1 = project.getService(TableInfoService.class);
-        Object obj2 = CacheDataUtils.getInstance().getSelectDbTable();
         // 校验类型映射
         if(!project.getService(TableInfoService.class).typeValidator(CacheDataUtils.getInstance().getSelectDbTable())) {
             // 没通过不打开窗口

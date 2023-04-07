@@ -205,7 +205,7 @@ public abstract class AbstractTableGroupPanel<T extends AbstractGroup<E>, E> {
             if (!initFlag) {
                 return;
             }
-            if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("confirmGroup", currGroupName)).isYes()) {
+            if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("confirmGroup", currGroupName)).guessWindowAndAsk()) {
                 if (Settings.DEFAULT_NAME.equals(currGroupName)) {
                     Messages.showWarningDialog(MyBundle.message("noDeleteGroup"), MyBundle.message("title"));
                     return;
@@ -258,7 +258,7 @@ public abstract class AbstractTableGroupPanel<T extends AbstractGroup<E>, E> {
             if (itemList.isEmpty()) {
                 return;
             }
-            if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("confirmDeleteSelect")).isYes()) {
+            if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("confirmDeleteSelect")).guessWindowAndAsk()) {
                 int[] rows = table.getSelectedRows();
                 for (int i = rows.length - 1; i >= 0; i--) {
                     tableModel.removeRow(rows[i]);

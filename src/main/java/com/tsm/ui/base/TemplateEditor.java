@@ -21,8 +21,8 @@ import com.intellij.testFramework.LightVirtualFile;
 import com.intellij.ui.BrowserHyperlinkListener;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SeparatorFactory;
+import com.intellij.util.ui.HTMLEditorKitBuilder;
 import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.UIUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -151,7 +151,7 @@ public class TemplateEditor {
         // 描述信息
         JEditorPane editorPane = new JEditorPane();
         // html形式展示
-        editorPane.setEditorKit(UIUtil.getHTMLEditorKit());
+        editorPane.setEditorKit(HTMLEditorKitBuilder.simple());
         // 仅查看
         editorPane.setEditable(false);
         editorPane.setText(description);

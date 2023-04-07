@@ -202,7 +202,7 @@ public abstract class BaseGroupPanel extends JPanel {
                     return;
                 }
                 // 确认删除？
-                if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("confirmGroup", groupName)).isYes()) {
+                if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("confirmGroup", groupName)).guessWindowAndAsk()) {
                     deleteGroup(groupName);
                 }
             }

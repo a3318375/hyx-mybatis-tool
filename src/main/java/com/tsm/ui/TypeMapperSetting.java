@@ -91,7 +91,7 @@ public class TypeMapperSetting implements Configurable {
             if (selectRows == null || selectRows.length == 0) {
                 return;
             }
-            if (!MessageDialogBuilder.yesNo(MsgValue.TITLE_INFO, "Confirm Delete Selected Item?").isYes()) {
+            if (!MessageDialogBuilder.yesNo(MsgValue.TITLE_INFO, "Confirm Delete Selected Item?").guessWindowAndAsk()) {
                 return;
             }
             // 从后面往前面移除，防止下标错位问题。
@@ -142,7 +142,7 @@ public class TypeMapperSetting implements Configurable {
 
         //删除分组
         deleteButton.addActionListener(e -> {
-            if (MessageDialogBuilder.yesNo(MsgValue.TITLE_INFO, "Confirm Delete Group " + typeMapperComboBox.getSelectedItem() + "?").isYes()) {
+            if (MessageDialogBuilder.yesNo(MsgValue.TITLE_INFO, "Confirm Delete Group " + typeMapperComboBox.getSelectedItem() + "?").guessWindowAndAsk()) {
                 if (Settings.DEFAULT_NAME.equals(currGroupName)) {
                     Messages.showWarningDialog("Can't Delete Default Group!", MsgValue.TITLE_INFO);
                     return;

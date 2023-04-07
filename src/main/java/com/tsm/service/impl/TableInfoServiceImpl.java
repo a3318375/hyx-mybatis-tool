@@ -276,7 +276,7 @@ public class TableInfoServiceImpl implements TableInfoService {
                 }
             }
             // 没找到类型，引导用户去添加类型
-            if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("noTypeError", typeName)).isYes()) {
+            if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("noTypeError", typeName)).guessWindowAndAsk()) {
                 ShowSettingsUtil.getInstance().showSettingsDialog(project, "Type Mapper");
                 return false;
             }

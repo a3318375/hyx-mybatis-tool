@@ -57,10 +57,6 @@ public class MainSetting implements Configurable, Configurable.Composite {
      */
     private JButton resetBtn;
     /**
-     * 模板导入按钮
-     */
-    private JButton importBtn;
-    /**
      * 模板导出按钮
      */
     private JButton exportBtn;
@@ -101,7 +97,7 @@ public class MainSetting implements Configurable, Configurable.Composite {
         Settings settings = Settings.getInstance();
         //重置配置信息
         resetBtn.addActionListener(e -> {
-            if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("resetDefaultSetting")).isYes()) {
+            if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("resetDefaultSetting")).guessWindowAndAsk()) {
                 if (CollectionUtil.isEmpty(resetList)) {
                     return;
                 }
@@ -120,58 +116,6 @@ public class MainSetting implements Configurable, Configurable.Composite {
                         e1.printStackTrace();
                     }
                 });
-            }
-        });
-
-        // 模板导入事件
-        importBtn.addActionListener(e -> {
-            String token = Messages.showInputDialog("Token:", MyBundle.message("title"), IconLoader.getIcon("/icondd/passwordLock.png", MainSetting.class), "", new InputValidator() {
-                @Override
-                public boolean checkInput(String inputString) {
-                    return !StringUtils.isEmpty(inputString);
-                }
-
-                @Override
-                public boolean canClose(String inputString) {
-                    return this.checkInput(inputString);
-                }
-            });
-            if (token == null) {
-                return;
-            }
-            String result = HttpUtils.get(String.format("/template?token=%s", token));
-            if (result == null) {
-                return;
-            }
-            // 解析数据
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                JsonNode jsonNode = objectMapper.readTree(result);
-                if (jsonNode == null) {
-                    return;
-                }
-                // 配置覆盖
-                coverConfig(jsonNode, StrState.TYPE_MAPPER, TypeMapperGroup.class, settings.getTypeMapperGroupMap());
-                coverConfig(jsonNode, StrState.TEMPLATE, TemplateGroup.class, settings.getTemplateGroupMap());
-                coverConfig(jsonNode, StrState.COLUMN_CONFIG, ColumnConfigGroup.class, settings.getColumnConfigGroupMap());
-                coverConfig(jsonNode, StrState.GLOBAL_CONFIG, GlobalConfigGroup.class, settings.getGlobalConfigGroupMap());
-                // 重置配置
-                allList.forEach(UnnamedConfigurable::reset);
-                if (CollectionUtil.isEmpty(saveList)) {
-                    return;
-                }
-                // 保存
-                allList.forEach(configurable -> {
-                    try {
-                        configurable.apply();
-                    } catch (ConfigurationException e1) {
-                        e1.printStackTrace();
-                    }
-                });
-                // 覆盖提示
-                Messages.showInfoMessage(MyBundle.message("importSuccess"), MyBundle.message("title"));
-            } catch (IOException e1) {
-                ExceptionUtil.rethrow(e1);
             }
         });
 
@@ -289,7 +233,7 @@ public class MainSetting implements Configurable, Configurable.Composite {
                 String value = node.get(key).toString();
                 T group = objectMapper.readValue(value, cls);
                 if (srcGroup.containsKey(key)) {
-                    if (!MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("coverGroup", name, key)).isYes()) {
+                    if (!MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("coverGroup", name, key)).guessWindowAndAsk()) {
                         continue;
                     }
                 }

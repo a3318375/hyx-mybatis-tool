@@ -295,7 +295,7 @@ public class SelectSavePath extends JDialog {
         //选择路径
         pathChooseButton.addActionListener(e -> {
             //将当前选中的model设置为基础路径
-            VirtualFile path = project.getBaseDir();
+            VirtualFile path = project.getProjectFile();
             Module module = getSelectModule();
             if (module != null) {
                 path = ModuleUtils.getSourcePath(module);

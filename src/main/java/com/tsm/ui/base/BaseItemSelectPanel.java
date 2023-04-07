@@ -229,7 +229,7 @@ public abstract class BaseItemSelectPanel<T extends Item> {
             public void actionPerformed(AnActionEvent e) {
                 T selectedItem = getSelectedItem();
                 // 确认删除？
-                if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("confirmDelete", selectedItem.getName())).isYes()) {
+                if (MessageDialogBuilder.yesNo(MyBundle.message("title"), MyBundle.message("confirmDelete", selectedItem.getName())).guessWindowAndAsk()) {
                     deleteItem(selectedItem);
                 }
             }

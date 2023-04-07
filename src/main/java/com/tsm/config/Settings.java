@@ -1,5 +1,6 @@
 package com.tsm.config;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.tsm.entity.*;
 import com.intellij.ide.fileTemplates.impl.UrlUtil;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -83,7 +84,7 @@ public class Settings implements PersistentStateComponent<Settings> {
      * @return 实例对象
      */
     public static Settings getInstance() {
-        return ServiceManager.getService(Settings.class);
+        return ApplicationManager.getApplication().getService(Settings.class);
     }
 
     /**
@@ -99,11 +100,11 @@ public class Settings implements PersistentStateComponent<Settings> {
      */
     public void initDefault() {
         // 版本号
-        this.version = "1.2.0";
+        this.version = "1.0.0";
         // 默认编码
         this.encode = "UTF-8";
         // 作者名称
-        this.author = "makejava";
+        this.author = "yuxh";
         // 当前各项分组名称
         this.currTemplateGroupName = DEFAULT_NAME;
         this.currTypeMapperGroupName = DEFAULT_NAME;

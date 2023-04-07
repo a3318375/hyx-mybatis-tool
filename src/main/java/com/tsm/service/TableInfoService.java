@@ -30,7 +30,7 @@ public interface TableInfoService {
      * @return 实例对象
      */
     static TableInfoService getInstance(@NotNull Project project) {
-        return ServiceManager.getService(project, TableInfoService.class);
+        return project.getService(TableInfoService.class);
     }
 
     /**
